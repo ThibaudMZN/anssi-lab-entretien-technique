@@ -7,14 +7,14 @@ export type Position = {
   precision: number;
 };
 
-function App({ GPS }:{ GPS:() => Position }) {
+function App({ GPS }: { GPS: () => Position }) {
   const [position, setPosition] = useState<Position | undefined>();
-    const [temperatures, setTemperatures] = useState<number[]>([])
-    const [unite, setUnite] = useState<string>("")
+  const [temperatures, setTemperatures] = useState<number[]>([]);
+  const [unite, setUnite] = useState<string>("");
 
   useEffect(() => {
-    const position = GPS()
-    setPosition( position )
+    const position = GPS();
+    setPosition(position);
   }, []);
 
   useEffect(() => {
@@ -25,9 +25,9 @@ function App({ GPS }:{ GPS:() => Position }) {
       )
         .then((res) => res.json())
         .then((json) => {
-            setTemperatures(json.hourly.temperature_2m)
-            setUnite(json.hourly_units.temperature_2m)
-            console.log(json);
+          setTemperatures(json.hourly.temperature_2m);
+          setUnite(json.hourly_units.temperature_2m);
+          console.log(json);
         });
     }
   }, [position]);
@@ -46,9 +46,14 @@ function App({ GPS }:{ GPS:() => Position }) {
       </div>
       <div>
         <h2>Prévisions Météo</h2>
-          <div>
-              Températures : {temperatures.map( (temperature, index) => (<div key={index}>{temperature} {unite}</div>) )}
-          </div>
+        <div>
+          Températures :{" "}
+          {temperatures.map((temperature, index) => (
+            <div key={index}>
+              {temperature} {unite}
+            </div>
+          ))}
+        </div>
       </div>
     </>
   );
