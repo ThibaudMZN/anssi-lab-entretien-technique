@@ -9,7 +9,7 @@ type Position = {
 
 function App() {
   const [position, setPosition] = useState<Position | undefined>();
-    const [temperatureCourante, setTemperatureCourante] = useState<number>(0)
+    const [temperatures, setTemperatures] = useState<number[]>([])
     const [unite, setUnite] = useState<string>("")
 
   useEffect(() => {
@@ -33,7 +33,7 @@ function App() {
       )
         .then((res) => res.json())
         .then((json) => {
-            setTemperatureCourante(json.hourly.temperature_2m[0])
+            setTemperatures(json.hourly.temperature_2m)
             setUnite(json.hourly_units.temperature_2m)
             console.log(json);
         });
@@ -55,7 +55,7 @@ function App() {
       <div>
         <h2>Prévisions Météo</h2>
           <div>
-              Température courante : {`${temperatureCourante} ${unite}`}
+              Températures : {temperatures.map( (temperature, index) => (<div key={index}>{temperature} {unite}</div>) )}
           </div>
       </div>
     </>

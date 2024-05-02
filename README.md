@@ -27,3 +27,5 @@ Prettier est également présent et peut être lancé manuellement.
   - prévoir un mode « DÉMO » où l'on peut piloter manuellement la géolocalisation utilisée
 - Sujets de conversation :
   - Au-delà du code, parler du pipeline de build et de déploiement qui irait bien
+
+- Gestion des erreurs
