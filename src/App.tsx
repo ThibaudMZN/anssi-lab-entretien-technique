@@ -7,7 +7,18 @@ export type Position = {
   precision: number;
 };
 
-function App({ GPS }: { GPS: () => Position }) {
+export type PrevisionsDeTemperature = {
+  temperatures: number[];
+  unite: string;
+};
+
+function App({
+  GPS,
+  BulletinMeteo,
+}: {
+  GPS: () => Position;
+  BulletinMeteo: (p: Position) => Promise<PrevisionsDeTemperature>;
+}) {
   const [position, setPosition] = useState<Position | undefined>();
   const [temperatures, setTemperatures] = useState<number[]>([]);
   const [unite, setUnite] = useState<string>("");
@@ -15,22 +26,16 @@ function App({ GPS }: { GPS: () => Position }) {
   useEffect(() => {
     const position = GPS();
     setPosition(position);
-  }, []);
+  }, [GPS]);
 
   useEffect(() => {
     if (position) {
-      // https://open-meteo.com/en/docs/meteofrance-api
-      fetch(
-        `https://api.open-meteo.com/v1/meteofrance?latitude=${position.latitude}&longitude=${position.longitude}&hourly=temperature_2m&timezone=Europe%2FBerlin`,
-      )
-        .then((res) => res.json())
-        .then((json) => {
-          setTemperatures(json.hourly.temperature_2m);
-          setUnite(json.hourly_units.temperature_2m);
-          console.log(json);
-        });
+      BulletinMeteo(position).then((prevision) => {
+        setTemperatures(prevision.temperatures);
+        setUnite(prevision.unite);
+      });
     }
-  }, [position]);
+  }, [BulletinMeteo, position]);
 
   return (
     <>
