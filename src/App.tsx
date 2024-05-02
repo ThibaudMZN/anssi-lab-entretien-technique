@@ -9,6 +9,8 @@ type Position = {
 
 function App() {
   const [position, setPosition] = useState<Position | undefined>();
+    const [temperatureCourante, setTemperatureCourante] = useState<number>(0)
+    const [unite, setUnite] = useState<string>("")
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -30,7 +32,11 @@ function App() {
         `https://api.open-meteo.com/v1/meteofrance?latitude=${position.latitude}&longitude=${position.longitude}&hourly=temperature_2m&timezone=Europe%2FBerlin`,
       )
         .then((res) => res.json())
-        .then((json) => console.log(json));
+        .then((json) => {
+            setTemperatureCourante(json.hourly.temperature_2m[0])
+            setUnite(json.hourly_units.temperature_2m)
+            console.log(json);
+        });
     }
   }, [position]);
 
@@ -47,7 +53,10 @@ function App() {
         )}
       </div>
       <div>
-        <h2>Prévisions Météo</h2>…
+        <h2>Prévisions Météo</h2>
+          <div>
+              Température courante : {`${temperatureCourante} ${unite}`}
+          </div>
       </div>
     </>
   );
