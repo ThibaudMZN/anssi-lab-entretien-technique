@@ -1,28 +1,20 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
-type Position = {
+export type Position = {
   latitude: number;
   longitude: number;
   precision: number;
 };
 
-function App() {
+function App({ GPS }:{ GPS:() => Position }) {
   const [position, setPosition] = useState<Position | undefined>();
     const [temperatures, setTemperatures] = useState<number[]>([])
     const [unite, setUnite] = useState<string>("")
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      ({ coords }) =>
-        setPosition({
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-          precision: coords.accuracy,
-        }),
-      () => console.error("KO"),
-      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 },
-    );
+    const position = GPS()
+    setPosition( position )
   }, []);
 
   useEffect(() => {
